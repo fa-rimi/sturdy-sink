@@ -1,5 +1,8 @@
 const express = require("express");
 const path = require("path");
+require("dotenv").config(); // Load environment variables
+const connectToDatabase = require("./config/connectDB");
+
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -20,6 +23,15 @@ app.get("/*", (req, res) => {
  * * Start Server
  * @method listen
  */
-app.listen(port, () => {
-  console.log(`express server running live on localhost:${port}`);
-});
+// Connect to the database and start the server
+(async () => {
+  try {
+    await connectToDatabase();
+    app.listen(port, () => {
+      console.log(`express server running live on localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start the server:", error);
+    process.exit(1);
+  }
+})();
