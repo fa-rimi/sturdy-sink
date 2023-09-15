@@ -1,10 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import { useState, React } from "react";
+import HomePg from "./pages/HomePg";
+import AuthPg from "./pages/AuthPg";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div>
+      <AuthPg />
+    </div>
+  );
+};
 
-export default App
+export default App;
