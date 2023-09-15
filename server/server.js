@@ -1,13 +1,18 @@
 const express = require("express");
 const path = require("path");
-require("dotenv").config(); // Load environment variables
+const dotenv = require("dotenv");
 const connectToDatabase = require("./config/connectDB");
 
+// Load environment variables
+dotenv.config();
+
+// Create an Express app
 const app = express();
 const port = process.env.PORT || 3001;
 
-const distPath = path.join(__dirname, "../client/dist"); // Defined path to dist/
-app.use(express.static(distPath)); // Serve static files in dist/
+// Serve static files from the "dist" directory
+const distPath = path.join(__dirname, "../client/dist");
+app.use(express.static(distPath));
 
 /**-----------------|
  **Catch All Route* |
@@ -21,9 +26,8 @@ app.get("/*", (req, res) => {
 
 /**
  * * Start Server
- * @method listen
+ * @description Connect to the database and start the server
  */
-// Connect to the database and start the server
 (async () => {
   try {
     await connectToDatabase();
