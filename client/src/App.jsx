@@ -1,13 +1,23 @@
 /* eslint-disable no-unused-vars */
-import { useState, React } from "react";
-import HomePg from "./pages/HomePg";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AuthPg from "./pages/AuthPg";
+import SignUp from "./components/SignUp";
 
 const App = () => {
   return (
-    <div>
-      <AuthPg />
-    </div>
+    <Router>
+      <div>
+        <Switch>
+          <Route path="/">
+            <AuthPg />
+          </Route>
+          <Route path="/register">
+            <SignUp />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 };
 
