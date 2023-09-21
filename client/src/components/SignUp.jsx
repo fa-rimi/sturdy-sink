@@ -2,28 +2,51 @@ import { useState } from "react";
 
 const SignUp = () => {
   // Initialize the registration form fields as an object with empty strings
-  const [register, setRegister] = useState({
+  const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
     password: "",
     confirm: "",
-    // These fields are set to empty strings initially as the user hasn't input data yet
+    error: "", // Add an error field to handle potential errors
   });
 
   // Disable the submit button if passwords do not match
-  const disable = register.password !== register.confirm;
+  const disable = registerData.password !== registerData.confirm;
+
+  // Handle input changes for all form fields
+  const handleChange = (e) => {
+    setRegisterData({
+      ...registerData,
+      [e.target.name]: e.target.value,
+      error: "", // Clear the error when the user makes changes
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Perform form validation and user registration
+    // Add validation logic and error handling
+
+    // If successful, proceed with user registration
+
+    // If there's an error during registration, set an error message in state
+    // Example: setRegisterData({ ...registerData, error: 'Registration failed' });
+  };
 
   return (
     <div>
       <div>
-        <form action="" method="post">
+        <form onSubmit={handleSubmit}>
           {/* Label and input field for the Name */}
           <label htmlFor="name">Name: </label>
           <input
             type="text"
             name="name"
-            value={register.name}
             placeholder="Enter Name"
+            value={registerData.name}
+            onChange={handleChange}
             required
           />
 
@@ -32,8 +55,9 @@ const SignUp = () => {
           <input
             type="email"
             name="email"
-            value={register.email}
             placeholder="Enter Email"
+            value={registerData.email}
+            onChange={handleChange}
             required
           />
 
@@ -42,8 +66,9 @@ const SignUp = () => {
           <input
             type="password"
             name="password"
-            value={register.password}
             placeholder="Enter Password"
+            value={registerData.password}
+            onChange={handleChange}
             required
           />
 
@@ -52,10 +77,14 @@ const SignUp = () => {
           <input
             type="password"
             name="confirm"
-            value={register.confirm}
             placeholder="Confirm Password"
+            value={registerData.confirm}
+            onChange={handleChange}
             required
           />
+
+          {/* Display error message if there's an error */}
+          {registerData.error && <p>{registerData.error}</p>}
 
           {/* Submit button with disabled attribute */}
           <button type="submit" disabled={disable}>
