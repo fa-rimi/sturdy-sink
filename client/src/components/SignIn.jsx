@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import FontAwesome icons
 
 const SignIn = () => {
   const [loginData, setLoginData] = useState({
@@ -8,7 +10,8 @@ const SignIn = () => {
     error: "", // Add an error field to handle potential errors
   });
 
-  // Handle input changes for all form fields
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     setLoginData({
       ...loginData,
@@ -17,9 +20,18 @@ const SignIn = () => {
     });
   };
 
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.get("/");
+  };
+
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         {/* Label and input field for the Name */}
         <label htmlFor="name">Name:</label>
         <input
@@ -33,14 +45,19 @@ const SignIn = () => {
 
         {/* Label and input field for the Password */}
         <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Enter Password"
-          value={loginData.password}
-          onChange={handleChange}
-          required
-        />
+        <div className="password-input">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Enter Password"
+            value={loginData.password}
+            onChange={handleChange}
+            required
+          />
+          <span className="password-toggle" onClick={handlePasswordToggle}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
 
         <button type="submit">Enter</button>
       </form>
