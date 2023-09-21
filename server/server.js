@@ -14,6 +14,8 @@ const port = process.env.PORT || 3001;
 const distPath = path.join(__dirname, "../client/dist");
 app.use(express.static(distPath));
 
+app.use('/', require('./routes/authAPI'))
+
 /**-----------------|
  **Catch All Route* |
  * -----------------|
