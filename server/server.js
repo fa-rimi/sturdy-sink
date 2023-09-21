@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
 const connectToDatabase = require("./config/connectDB");
+const cors = require("cors");
 
 // Load environment variables
 dotenv.config();
@@ -10,31 +11,36 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+// Middleware
+app.use(express.json()); // Parse JSON data
+
+// Enable CORS for your frontend domain (http://localhost:3000 in this case)
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, // Allow credentials (cookies)
+  })
+);
+
 // Serve static files from the "dist" directory
 const distPath = path.join(__dirname, "../client/dist");
 app.use(express.static(distPath));
 
-app.use('/', require('./routes/authAPI'))
+// Routes
+const authAPIRouter = require("./routes/authAPI");
+app.use("/", authAPIRouter);
 
-/**-----------------|
- **Catch All Route* |
- * -----------------|
- *
- * For all other requests that do not have a distinct route, serve the 'index.html' file
- */
+// Catch All Route
 app.get("/*", (req, res) => {
   res.sendFile(path.join(distPath, "index.html"));
 });
 
-/**
- * * Start Server
- * @description Connect to the database and start the server
- */
+// Start Server
 (async () => {
   try {
     await connectToDatabase();
     app.listen(port, () => {
-      console.log(`express server running live on localhost:${port}`);
+      console.log(`Express server running live on localhost:${port}`);
     });
   } catch (error) {
     console.error("Failed to start the server:", error);
