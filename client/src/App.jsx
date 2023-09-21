@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
-import Home from "./pages/HomePg";
+import HomePg from "./pages/HomePg";
 import AuthPg from "./pages/AuthPg";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
 
   // Create components for AuthPg and Home for better readability
   const authPage = <AuthPg setUser={setUser} />;
-  const homePage = <Home />;
+  const homePage = <HomePg />;
 
   return (
     <Router>
