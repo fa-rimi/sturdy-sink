@@ -4,6 +4,10 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import HomePg from "./pages/HomePg";
 import AuthPg from "./pages/AuthPg";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:3001/"
+axios.defaults.withCredentials = true;
 
 function App() {
   // Initialize user state to null
