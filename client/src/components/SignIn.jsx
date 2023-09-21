@@ -1,16 +1,20 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignIn = () => {
+  const [login, setLogin] = useState({
+    name: "",
+    password: ""
+  })
+
   return (
     <div>
       <form>
         <label htmlFor="name">Name:</label>
-        <input type="text" id="name" name="name" required />
+        <input type="text" name="name" value={login.name} placeholder="Enter Name" required />
 
         <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <input type="password" name="password" value={login.password} placeholder="Enter Password" required />
 
         <button type="submit">Enter</button>
       </form>

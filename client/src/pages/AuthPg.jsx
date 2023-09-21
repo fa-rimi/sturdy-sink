@@ -4,9 +4,9 @@ import SignIn from "../components/SignIn";
 const AuthPg = () => {
 
   return (
-    <main>
+    <div>
         <SignIn/>
-    </main>
+    </div>
   );
 };
 
