@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaCheckCircle } from "react-icons/fa"; // Import the checkmark icon
 
 const SignUp = () => {
   // Initialize the registration form fields as an object with empty strings
@@ -7,11 +8,14 @@ const SignUp = () => {
     email: "",
     password: "",
     confirm: "",
-    error: "", // Add an error field to handle potential errors
+    error: "",
   });
 
-  // Disable the submit button if passwords do not match
-  const disable = registerData.password !== registerData.confirm;
+  // Determine whether to display the checkmark
+  const showCheckmark =
+    registerData.confirm === registerData.password &&
+    registerData.confirm !== "" && // Added condition: confirm is not empty
+    registerData.password !== ""; // Added condition: password is not empty
 
   // Handle input changes for all form fields
   const handleChange = (e) => {
@@ -26,13 +30,15 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Perform form validation and user registration
-    // Add validation logic and error handling
+    // Set a general error message for registration failure
+    setRegisterData({
+      ...registerData,
+      error: "Registration failed. Please try again :)",
+    });
 
-    // If successful, proceed with user registration
+    // You can perform further registration logic here, such as making API requests
 
-    // If there's an error during registration, set an error message in state
-    // Example: setRegisterData({ ...registerData, error: 'Registration failed' });
+    // If there's an error during registration, set an appropriate error message
   };
 
   return (
@@ -74,20 +80,28 @@ const SignUp = () => {
 
           {/* Label and input field for confirming the Password */}
           <label htmlFor="confirm">Confirm Password: </label>
-          <input
-            type="password"
-            name="confirm"
-            placeholder="Confirm Password"
-            value={registerData.confirm}
-            onChange={handleChange}
-            required
-          />
+          <div className="password-confirm">
+            <input
+              type="password"
+              name="confirm"
+              placeholder="Confirm Password"
+              value={registerData.confirm}
+              onChange={handleChange}
+              required
+            />
+            {/* Display the green checkmark icon when passwords match */}
+            {showCheckmark && (
+              <FaCheckCircle className="checkmark-icon" color="green" />
+            )}
+          </div>
 
-          {/* Display error message if there's an error */}
+          {/* Display error message if there's a registration error */}
           {registerData.error && <p>{registerData.error}</p>}
 
           {/* Submit button with disabled attribute */}
-          <button type="submit" disabled={disable}>
+          <button
+            type="submit"
+            disabled={registerData.password !== registerData.confirm}>
             Create Account
           </button>
         </form>
