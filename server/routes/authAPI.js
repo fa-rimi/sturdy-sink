@@ -1,19 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const cors = require("cors");
 
-const { test } = require('../controllers/authControllers');
-
-// Middleware
-router.use(
-    cors({
-        credentials: true,
-        origin: 'http://localhost:3000/'
-    })
-)
+const { test, SignUp } = require('../controllers/authControllers');
 
 // Routes
 router.get("/", test)
+router.post("/SignUp", SignUp)
 
 // Export
 module.exports = router;
