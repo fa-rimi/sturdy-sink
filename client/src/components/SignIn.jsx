@@ -14,6 +14,11 @@ const SignIn = () => {
 
         <button type="submit">Enter</button>
       </form>
+
+      {/* Add a link to the sign-up page */}
+      <p>
+        Don&apos;t have an account? <Link to="/SignUp">Sign Up Here</Link>
+      </p>
     </div>
   );
 };
