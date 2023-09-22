@@ -5,8 +5,9 @@ import SignUp from "./components/SignUp";
 import HomePg from "./pages/HomePg";
 import AuthPg from "./pages/AuthPg";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
 
-axios.defaults.baseURL = "http://localhost:3001/"
+axios.defaults.baseURL = "http://localhost:3001/";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -18,22 +19,25 @@ function App() {
   const homePage = <HomePg />;
 
   return (
-    <Router>
-      {/* Define the routes for your application */}
-      <Routes>
-        {/* Route for the SignIn component */}
-        <Route path="/SignIn" element={<SignIn />} />
+    <>
+    <Toaster position="bottom-center" toastOptions={{duration: 2000}}/>
+      <Router>
+        {/* Define the routes for your application */}
+        <Routes>
+          {/* Route for the SignIn component */}
+          <Route path="/SignIn" element={<SignIn />} />
 
-        {/* Route for the SignUp component */}
-        <Route path="/SignUp" element={<SignUp />} />
+          {/* Route for the SignUp component */}
+          <Route path="/SignUp" element={<SignUp />} />
 
-        {/* Route for the Home component, conditionally rendering either Home or AuthPg */}
-        <Route path="/Home" element={user ? homePage : authPage} />
+          {/* Route for the Home component, conditionally rendering either Home or AuthPg */}
+          <Route path="/Home" element={user ? homePage : authPage} />
 
-        {/* Fallback route for the root URL "/", also conditionally rendering Home or AuthPg */}
-        <Route path="/" element={user ? homePage : authPage} />
-      </Routes>
-    </Router>
+          {/* Fallback route for the root URL "/", also conditionally rendering Home or AuthPg */}
+          <Route path="/" element={user ? homePage : authPage} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
