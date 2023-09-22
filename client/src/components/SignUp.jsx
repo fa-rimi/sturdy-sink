@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa"; // Import the checkmark icon
+// import UserModel from "../../../server/models/users";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const SignUp = () => {
   // Initialize the registration form fields as an object with empty strings
@@ -20,26 +23,44 @@ const SignUp = () => {
   // Handle input changes for all form fields
   const handleChange = (e) => {
     setRegisterData({
+      // Spread the data that's already there
       ...registerData,
+      // Replace data with what user inputs
       [e.target.name]: e.target.value,
       error: "", // Clear the error when the user makes changes
     });
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Set a general error message for registration failure
-    setRegisterData({
-      ...registerData,
-      error: "Registration failed. Please try again :)",
-    });
-
-    // You can perform further registration logic here, such as making API requests
-
-    // If there's an error during registration, set an appropriate error message
-  };
+  
+    try {
+      // Deconstruct the data
+      const { name, email, password } = registerData;
+  
+      const response = await axios.post("/SignUp", {
+        name,
+        email,
+        password,
+      });
+  
+      if (response.data.error) {
+        toast.error(response.data.error); // Use response.data.error to access the error message
+      } else {
+        setRegisterData({
+          name: "",
+          email: "",
+          password: "",
+          confirm: "",
+          error: "",
+        });
+        toast.success("Register Success");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };  
 
   return (
     <div>
