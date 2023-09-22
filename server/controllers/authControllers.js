@@ -6,17 +6,36 @@ const test = (req, res) => {
 };
 
 const registerUser = async (req, res) => {
+  const { name, email, password } = req.body;
+
   try {
-    const { name, email, password } = req.body;
-    const user = await UserModel.create({
-      name,
-      email,
-      password,
-    });
-    res.status(201).json(user); // Respond with the created user data
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "Server error" });
+    // Check for name
+    if (!name) {
+      return res.json({
+        error: "Name is required",
+      });
+    }
+    // Check for password
+    if (!password || password.length < 6) {
+      return res.json({
+        error: "Password must contain 6 characters",
+      });
+    }
+    // Check for email
+    const checkExist = await UserModel.findOne({ email });
+    if (checkExist) {
+      return res.json({
+        error: "Email is already in use",
+      });
+    }
+
+    const createUser = await UserModel.create({
+      name, email, password
+    })
+
+    return res.json(createUser)
+  } catch (error) {
+    console.log(error);
   }
 };
 
