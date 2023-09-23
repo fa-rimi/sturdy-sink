@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa"; // Import the checkmark icon
-// import UserModel from "../../../server/models/users";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
 const SignUp = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   // Initialize the registration form fields as an object with empty strings
   const [registerData, setRegisterData] = useState({
     name: "",
@@ -16,9 +18,9 @@ const SignUp = () => {
 
   // Determine whether to display the checkmark
   const showCheckmark =
-    registerData.confirm === registerData.password &&
-    registerData.confirm !== "" && // Added condition: confirm is not empty
-    registerData.password !== ""; // Added condition: password is not empty
+    registerData.confirm === registerData.password && // Passwords match
+    registerData.confirm.length >= 6 && // Password length is at least 6 characters
+    registerData.confirm.trim() !== ""; // Password is not blank (no leading/trailing whitespaces)
 
   // Handle input changes for all form fields
   const handleChange = (e) => {
@@ -34,20 +36,23 @@ const SignUp = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Deconstruct the data
+    const { name, email, password } = registerData;
+
     try {
-      // Deconstruct the data
-      const { name, email, password } = registerData;
-  
+      // Send a POST request to the "/SignUp" endpoint
       const response = await axios.post("/SignUp", {
         name,
         email,
         password,
       });
-  
+
       if (response.data.error) {
-        toast.error(response.data.error); // Use response.data.error to access the error message
+        // Display an error toast message if there's an error from the server
+        toast.error(response.data.error);
       } else {
+        // Reset the registration form fields
         setRegisterData({
           name: "",
           email: "",
@@ -55,12 +60,17 @@ const SignUp = () => {
           confirm: "",
           error: "",
         });
+
+        // Navigate to "/Home" on successful registration (you can adjust this route as needed)
+        navigate("/Home");
+
+        // Display a success toast message
         toast.success("Register Success");
       }
     } catch (error) {
       console.error(error);
     }
-  };  
+  };
 
   return (
     <div>
@@ -126,6 +136,10 @@ const SignUp = () => {
             Create Account
           </button>
         </form>
+        {/* Add a link to the sign-in page */}
+        <p>
+          Already have an account? <Link to="/SignIn">Sign In Here</Link>
+        </p>
       </div>
     </div>
   );
