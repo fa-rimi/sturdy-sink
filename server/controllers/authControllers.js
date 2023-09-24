@@ -1,10 +1,6 @@
 const UserModel = require("../models/users");
 const { hashPassword, comparePassword } = require("../helpers/hash");
-
-// Test route
-const test = (req, res) => {
-  res.json("Test is working");
-};
+const { createToken, verifyToken } = require("../helpers/jwt");
 
 /**
  * Register Endpoint -> authAPI.js (router.post("/SignUp", registerUser))
@@ -30,8 +26,8 @@ const registerUser = async (req, res) => {
       });
     }
     // Check for email
-    const checkExist = await UserModel.findOne({ email });
-    if (checkExist) {
+    const user = await UserModel.findOne({ email });
+    if (user) {
       return res.json({
         error: "Email is already in use",
       });
@@ -45,9 +41,23 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    return res.json(createUser);
+    // Create new token
+    const token = createToken(user);
+
+    // Set a cookie with the token
+    res.cookie("authToken", token, {
+      httpOnly: true, // Make the cookie accessible only via HTTP(S)
+      maxAge: 24 * 60 * 60 * 1000, // Cookie expires in 24 hours
+    });
+
+    return res.json({
+      user: createUser,
+      token, // Send the token as part of the response
+    });
   } catch (error) {
     console.log(error);
+    // You may want to handle and return an error response here
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -63,18 +73,30 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     // Check if user exists with email
-    const checkExist = await UserModel.findOne({ email });
-    if (!checkExist) {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
       return res.json({
         error: "Email not found",
       });
     }
 
     // Check if password matches
-    const checkMatch = await comparePassword(password, checkExist.password);
+    const checkMatch = await comparePassword(password, user.password);
     if (checkMatch) {
-      // Password is correct
-      res.json("Correct password");
+      // Password is correct, create a JWT token for the user
+      const token = createToken();
+
+      // Set a cookie with the token
+      res.cookie("authToken", token, {
+        httpOnly: true, // Make the cookie accessible only via HTTP(S)
+        maxAge: 24 * 60 * 60 * 1000, // Cookie expires in 24 hours
+      });
+
+      res.json({
+        message: "Correct password",
+        user, // Send the user details if needed
+        token, // Send the token as part of the response
+      });
     } else {
       // Password is incorrect
       return res.json({
@@ -83,11 +105,12 @@ const loginUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    // You may want to handle and return an error response here
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 module.exports = {
-  test,
   registerUser,
   loginUser,
 };
