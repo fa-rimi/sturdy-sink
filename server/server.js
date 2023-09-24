@@ -1,8 +1,8 @@
 const express = require("express");
-const path = require("path");
 const dotenv = require("dotenv");
 const connectToDatabase = require("./config/connectDB");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // Load environment variables
 dotenv.config();
@@ -13,6 +13,8 @@ const port = process.env.PORT || 3001;
 
 // Middleware
 app.use(express.json()); // Parse JSON data
+app.use(express.urlencoded({ extended: true })); // extended: true -> because I will be using multiple schemas (embedded schemas)
+app.use(cookieParser()); // Parse incoming cookies attached to HTTP requests
 
 // Enable CORS for your frontend domain (http://localhost:3000 in this case)
 app.use(
@@ -22,18 +24,9 @@ app.use(
   })
 );
 
-// Serve static files from the "dist" directory
-const distPath = path.join(__dirname, "../client/dist");
-app.use(express.static(distPath));
-
 // Routes
 const authAPIRouter = require("./routes/authAPI");
 app.use("/", authAPIRouter);
-
-// Catch All Route
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(distPath, "index.html"));
-});
 
 // Start Server
 (async () => {
