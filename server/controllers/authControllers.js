@@ -1,4 +1,4 @@
-const UserModel = require("../models/users");
+const User = require("../models/users");
 const { hashPassword, comparePassword } = require("../helpers/hash");
 const { createToken, verifyToken } = require("../helpers/jwt");
 
@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
       });
     }
     // Check for email
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
     if (user) {
       return res.json({
         error: "Email is already in use",
@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
 
     // Create User
     const hashedPassword = await hashPassword(password);
-    const createUser = await UserModel.create({
+    const createUser = await User.create({
       name,
       email,
       password: hashedPassword,
@@ -73,7 +73,7 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     // Check if user exists with email
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.json({
         error: "Email not found",
@@ -94,7 +94,7 @@ const loginUser = async (req, res) => {
 
       res.json({
         message: "Correct password",
-        user, // Send the user details if needed
+        user, // Send the user details
         token, // Send the token as part of the response
       });
     } else {

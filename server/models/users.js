@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const dictionarySchema = require("./dictionary");
 
 const userSchema = new Schema(
   {
@@ -19,9 +20,9 @@ const userSchema = new Schema(
       minLength: 6,
       required: true,
     },
+    dictionary: [dictionarySchema], // Embed the personal dictionary as an array of dictionary entries
   },
   { timestamps: true }
 );
 
-const UserModel = mongoose.model("User", userSchema);
-module.exports = UserModel;
+module.exports = mongoose.model("User", userSchema);

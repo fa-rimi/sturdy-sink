@@ -66,42 +66,48 @@ const SignIn = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        {/* Label and input field for the Email */}
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          name="email"
-          placeholder="Enter Email"
-          value={loginData.email}
-          onChange={handleChange}
-          required
-        />
-
-        {/* Label and input field for the Password */}
-        <label htmlFor="password">Password:</label>
-        <div className="password-input">
+    <div className="w-[100vw] h-[100vh] flex flex-col justify-center items-center">
+      <div className="w-[300px] h-[400px] bg-blue-400 rounded-md flex flex-col justify-center items-center">
+        <form onSubmit={handleSubmit} className="w-fit h-fit">
+          {/* Input field for the Email */}
           <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Enter Password"
-            value={loginData.password}
+            type="email"
+            name="email"
+            placeholder="Enter Email"
+            value={loginData.email}
             onChange={handleChange}
             required
           />
-          <span className="password-toggle" onClick={handlePasswordToggle}>
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
-        </div>
 
-        <button type="submit">Enter</button>
-      </form>
+          {/* Input field for the Password */}
+          <div className="password-input flex flex-row items-center">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter Password"
+              value={loginData.password}
+              onChange={handleChange}
+              required
+            />
+            <span
+              className="password-toggle ml-2"
+              onClick={handlePasswordToggle}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
 
-      {/* Add a link to the sign-up page */}
-      <p>
-        Don&apos;t have an account? <Link to="/SignUp">Sign Up Here</Link>
-      </p>
+          <button
+            type="submit"
+            className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md bg-blue-100 border border-transparent font-semibold text-blue-500 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 ring-offset-white focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm">
+            Login
+          </button>
+        </form>
+
+        {/* Add a link to the sign-up page */}
+        <p className="text-[13px]">
+          Don&apos;t have an account? <Link to="/SignUp"> Sign Up Here</Link>
+        </p>
+      </div>
     </div>
   );
 };

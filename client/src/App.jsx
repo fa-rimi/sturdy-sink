@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import AuthPg from "./pages/AuthPg";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import HomePg from "./pages/HomePg";
-import AuthPg from "./pages/AuthPg";
+import DictionaryPg from "./pages/DictionaryPg";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
+import "./index.css"
 
 axios.defaults.baseURL = "http://localhost:3001/";
 axios.defaults.withCredentials = true;
@@ -20,7 +22,7 @@ function App() {
 
   return (
     <>
-      <Toaster position="bottom-center" toastOptions={{ duration: 2000 }} />
+      {/* <Toaster position="top-center" toastOptions={{ duration: 2000 }} /> */}
       <Router>
         {/* Define the routes for your application */}
         <Routes>
@@ -30,8 +32,11 @@ function App() {
           {/* Route for the SignUp component */}
           <Route path="/SignUp" element={<SignUp />} />
 
-          {/* Route for the Home component, conditionally rendering either Home or AuthPg */}
+          {/* Route for the Home component */}
           <Route path="/Home" element={<HomePg />} />
+
+          {/* Route for the Dictionary component */}
+          <Route path="/Dictionary" element={<DictionaryPg />} />
 
           {/* Fallback route for the root URL "/", also conditionally rendering Home or AuthPg */}
           <Route path="/" element={user ? homePage : authPage} />

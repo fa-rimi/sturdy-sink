@@ -1,10 +1,17 @@
-/* eslint-disable no-unused-vars */
-import React from 'react'
+import { ImBook } from "react-icons/im";
+import { Link } from "react-router-dom";
+import LogoutBtn from "./LogoutBtn";
 
 const NavBar = () => {
   return (
-    <div>NavBar</div>
-  )
-}
+    <nav>
+      <Link to="/Dictionary">
+        <ImBook />
+      </Link>
 
-export default NavBar
+      <LogoutBtn/>
+    </nav>
+  );
+};
+
+export default NavBar;
