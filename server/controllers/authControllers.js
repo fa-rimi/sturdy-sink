@@ -30,6 +30,7 @@ const createUser = async (name, email, password) => {
     password: hashedPassword,
   });
 
+  console.log(user);
   return user;
 };
 

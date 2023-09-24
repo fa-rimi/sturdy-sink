@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import NavBar from '../components/NavBar'
+import MainNav from '../components/navbars/MainNav'
 
 const HomePg = () => {
   return (
     <div>
-        <NavBar/>
+        <MainNav/>
     </div>
   )
 }
