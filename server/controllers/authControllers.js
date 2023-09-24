@@ -15,8 +15,8 @@ const createUser = async (name, email, password) => {
   }
 
   // Check for email
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
+  const userExists = await User.findOne({ email });
+  if (userExists) {
     throw new Error("Email is already in use");
   }
 

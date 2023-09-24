@@ -28,6 +28,9 @@ app.use(
 const authAPIRouter = require("./routes/authAPI");
 app.use("/", authAPIRouter);
 
+const dictionaryRoutes = require("./routes/dictionaryAPI");
+app.use("/", dictionaryRoutes);
+
 // Start Server
 (async () => {
   try {

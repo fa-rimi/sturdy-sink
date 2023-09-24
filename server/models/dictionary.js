@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const tagsSchema = require("./tags");
+const Tags = require("./tags"); // Import the Tags schema
 
 const dictionarySchema = new Schema(
   {
@@ -12,9 +12,17 @@ const dictionarySchema = new Schema(
       type: String,
       required: true,
     },
-    tags: [tagsSchema],
+    example: {
+      type: String,
+    },
+    tags: [
+      {
+        type: Schema.Types.ObjectId, // Use ObjectId to reference the Tags schema
+        ref: "Tags", // Reference the "Tags" model
+      },
+    ],
   },
   { timestamps: true }
 );
 
-module.exports = dictionarySchema;
+module.exports = mongoose.model("Dictionary", dictionarySchema);
