@@ -7,7 +7,7 @@ const createToken = () => {
 // Function to verify a JWT token
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, process.env.SECRET);
   } catch (error) {
     console.log(error);
   }

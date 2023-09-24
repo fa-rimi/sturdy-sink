@@ -1,18 +1,20 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
 
 const LogoutBtn = () => {
-  const history = useHistory();
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   const handleLogout = () => {
     // Clear user authentication (e.g., remove tokens, clear cookies, etc.)
+    localStorage.removeItem("authToken"); // Clear JWT token from local storage
+
     // Redirect the user to the login page or any other appropriate route
-    history.push("/login"); // Redirect to the login page
+    navigate("/SignIn"); // Navigate back to sign in page
   };
 
   return (
     <div className="">
-      <button type="submit" onClick={handleLogout}>
+      <button type="button" onClick={handleLogout}>
         Logout <BsBoxArrowRight />{" "}
       </button>
     </div>
