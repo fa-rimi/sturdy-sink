@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const tagsSchema = require("./tags");
 
 const dictionarySchema = new Schema(
   {
@@ -11,6 +12,7 @@ const dictionarySchema = new Schema(
       type: String,
       required: true,
     },
+    tags: [tagsSchema],
   },
   { timestamps: true }
 );
