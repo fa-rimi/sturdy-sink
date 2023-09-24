@@ -8,7 +8,6 @@ import DictionaryPg from "./pages/DictionaryPg";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
-import NewEntry from "./components/dictionary/NewEntry";
 
 axios.defaults.baseURL = "http://localhost:3001/";
 axios.defaults.withCredentials = true;

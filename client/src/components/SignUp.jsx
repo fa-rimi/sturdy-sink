@@ -42,15 +42,15 @@ const SignUp = () => {
 
     try {
       // Send a POST request to the "/SignUp" endpoint
-      const response = await axios.post("/SignUp", {
+      const registerData = await axios.post("/SignUp", {
         name,
         email,
         password,
       });
 
-      if (response.data.error) {
+      if (registerData.data.error) {
         // Display an error toast message if there's an error from the server
-        toast.error(response.data.error);
+        toast.error(registerData.data.error);
       } else {
         // Reset the registration form fields
         setRegisterData({
