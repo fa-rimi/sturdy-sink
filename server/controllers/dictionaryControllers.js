@@ -3,21 +3,30 @@ const Dictionary = require("../models/dictionary");
 // Function to create a new entry
 const newEntry = async (req, res) => {
   const { word, definition, example } = req.body;
+  const userId = req.user._id;
 
   try {
     // Check if Word exists
-    const wordExists = await Dictionary.findOne({ word });
+    const wordExists = await Dictionary.findOne({ word, user: userId });
 
     if (wordExists) {
       // Send a custom error message to the client
       return res.status(400).json({ error: "Word already exists" });
     } else {
-      // Create a new word entry
-      const newWord = new Dictionary({
-        word,
-        definition,
-        example,
-      });
+      // Example data with 'word' and 'definition' fields
+      const dictionaryData = {
+        user: userId, // Set the user ID
+        entries: [
+          {
+            word,
+            definition,
+            example,
+          },
+        ],
+      };
+
+      // Create a new dictionary entry with the provided data
+      const newWord = new Dictionary(dictionaryData);
 
       // Save the new word entry to the database
       await newWord.save();
