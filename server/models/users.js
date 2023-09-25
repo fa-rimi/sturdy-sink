@@ -20,7 +20,10 @@ const userSchema = new Schema(
       minLength: 6,
       required: true,
     },
-    dictionary: [Dictionary.schema], // Embed the personal dictionary as an array of dictionary entries
+    dictionary: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Dictionary",
+    },
   },
   { timestamps: true }
 );

@@ -66,7 +66,6 @@ const DictionaryPg = () => {
               <th>Word</th>
               <th>Definition</th>
               <th>Example</th>
-              <th>Tags</th>
             </tr>
           </thead>
           <tbody>
@@ -75,7 +74,6 @@ const DictionaryPg = () => {
                 <td>{word.word}</td>
                 <td>{word.definition}</td>
                 <td>{word.example}</td>
-                <td>{word.tags.join(", ")}</td>
               </tr>
             ))}
           </tbody>

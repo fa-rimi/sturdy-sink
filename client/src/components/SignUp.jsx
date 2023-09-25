@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaCheckCircle } from "react-icons/fa"; // Import the checkmark icon
+import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
 const SignUp = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   // Initialize the registration form fields as an object with empty strings
   const [registerData, setRegisterData] = useState({
@@ -15,11 +15,9 @@ const SignUp = () => {
     confirm: "",
   });
 
-  // Determine whether to display the checkmark
-  const showCheckmark =
-    registerData.confirm === registerData.password && // Passwords match
-    registerData.confirm.length >= 6 && // Password length is at least 6 characters
-    registerData.confirm.trim() !== ""; // Password is not blank (no leading/trailing whitespaces)
+  const isPasswordValid =
+    registerData.confirm === registerData.password &&
+    registerData.confirm.length >= 6;
 
   // Handle input changes for all form fields
   const handleChange = (e) => {
@@ -58,7 +56,9 @@ const SignUp = () => {
           confirm: "",
         });
 
-        // Navigate to "/Home" on successful registration (you can adjust this route as needed)
+        toast.success("Registered successfully");
+        toast.success(`${name}'s dictionary created.`);
+
         navigate("/Home");
 
         // Display a success toast message
@@ -66,8 +66,6 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error(error);
-      // Display a generic error toast message for network or other errors
-      toast.error("An error occurred. Please try again later.");
     }
   };
 
@@ -75,8 +73,7 @@ const SignUp = () => {
     <div>
       <div>
         <form onSubmit={handleSubmit}>
-          {/* Label and input field for the Name */}
-          <label htmlFor="name">Name: </label>
+          <label htmlFor="name">Name:</label>
           <input
             type="text"
             name="name"
@@ -86,8 +83,7 @@ const SignUp = () => {
             required
           />
 
-          {/* Label and input field for the Email */}
-          <label htmlFor="email">Email: </label>
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
             name="email"
@@ -97,8 +93,7 @@ const SignUp = () => {
             required
           />
 
-          {/* Label and input field for the Password */}
-          <label htmlFor="password">Password: </label>
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
             name="password"
@@ -108,8 +103,7 @@ const SignUp = () => {
             required
           />
 
-          {/* Label and input field for confirming the Password */}
-          <label htmlFor="confirm">Confirm Password: </label>
+          <label htmlFor="confirm">Confirm Password:</label>
           <div className="password-confirm">
             <input
               type="password"
@@ -119,19 +113,16 @@ const SignUp = () => {
               onChange={handleChange}
               required
             />
-            {/* Display the green checkmark icon when passwords match */}
-            {showCheckmark && (
+            {isPasswordValid && (
               <FaCheckCircle className="checkmark-icon" color="green" />
             )}
           </div>
 
-          {/* Submit button with disabled attribute */}
-          <button
-            type="submit"
-            disabled={registerData.password !== registerData.confirm}>
+          <button type="submit" disabled={!isPasswordValid}>
             Create Account
           </button>
         </form>
+
         {/* Add a link to the sign-in page */}
         <p>
           Already have an account? <Link to="/SignIn">Sign In Here</Link>

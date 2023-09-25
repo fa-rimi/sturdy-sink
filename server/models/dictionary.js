@@ -1,28 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Tags = require("./tags"); // Import the Tags schema
 
-const dictionarySchema = new Schema(
-  {
-    word: {
-      type: String,
-      required: true,
-    },
-    definition: {
-      type: String,
-      required: true,
-    },
-    example: {
-      type: String,
-    },
-    tags: [
-      {
-        type: Schema.Types.ObjectId, // Use ObjectId to reference the Tags schema
-        ref: "Tags", // Reference the "Tags" model
-      },
-    ],
+const dictionarySchema = new Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    unique: true, // Make sure each user has a unique dictionary
   },
-  { timestamps: true }
-);
+  entries: [
+    {
+      name: String,
+      definition: String,
+      word: String,
+      example: String,
+      tags: [String],
+    },
+  ],
+});
 
 module.exports = mongoose.model("Dictionary", dictionarySchema);
