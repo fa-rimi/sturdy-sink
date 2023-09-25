@@ -9,23 +9,24 @@ const newEntry = async (req, res) => {
     const wordExists = await Dictionary.findOne({ word });
 
     if (wordExists) {
+      // Send a custom error message to the client
       return res.status(400).json({ error: "Word already exists" });
+    } else {
+      // Create a new word entry
+      const newWord = new Dictionary({
+        word,
+        definition,
+        example,
+      });
+
+      // Save the new word entry to the database
+      await newWord.save();
+
+      return res.status(200).json({ message: "Word added successfully" });
     }
-
-    // Create a new word entry
-    const newWord = new Dictionary({
-      word,
-      definition,
-      example,
-    });
-
-    // Save the new word entry to the database
-    await newWord.save();
-
-    res.status(200).json({ message: "Word added successfully" });
   } catch (error) {
     console.error("Error creating new entry:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

@@ -32,7 +32,7 @@ const NewEntry = () => {
       });
 
       if (response.data.error) {
-        toast.error(response.data.error);
+        toast.error(response.data.error); // Display the error message as a toast
       } else {
         setEntryData({
           word: "",
@@ -40,13 +40,11 @@ const NewEntry = () => {
           example: "",
         });
 
-              // Call fetchWords to update the word list
-      fetchWords();
-      
         navigate("/Dictionary");
       }
     } catch (error) {
       console.error(error);
+      toast.error("An error occurred. Please try again later."); // Display a generic error message as a toast
     }
   };
 

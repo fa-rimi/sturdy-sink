@@ -13,7 +13,6 @@ const SignUp = () => {
     email: "",
     password: "",
     confirm: "",
-    error: "",
   });
 
   // Determine whether to display the checkmark
@@ -27,9 +26,8 @@ const SignUp = () => {
     setRegisterData({
       // Spread the data that's already there
       ...registerData,
-      // Replace data with what user inputs
+      // Replace data with what the user inputs
       [e.target.name]: e.target.value,
-      error: "", // Clear the error when the user makes changes
     });
   };
 
@@ -42,15 +40,15 @@ const SignUp = () => {
 
     try {
       // Send a POST request to the "/SignUp" endpoint
-      const registerData = await axios.post("/SignUp", {
+      const response = await axios.post("/SignUp", {
         name,
         email,
         password,
       });
 
-      if (registerData.data.error) {
+      if (response.data.error) {
         // Display an error toast message if there's an error from the server
-        toast.error(registerData.data.error);
+        toast.error(response.data.error);
       } else {
         // Reset the registration form fields
         setRegisterData({
@@ -58,7 +56,6 @@ const SignUp = () => {
           email: "",
           password: "",
           confirm: "",
-          error: "",
         });
 
         // Navigate to "/Home" on successful registration (you can adjust this route as needed)
@@ -69,6 +66,8 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error(error);
+      // Display a generic error toast message for network or other errors
+      toast.error("An error occurred. Please try again later.");
     }
   };
 
@@ -125,9 +124,6 @@ const SignUp = () => {
               <FaCheckCircle className="checkmark-icon" color="green" />
             )}
           </div>
-
-          {/* Display error message if there's a registration error */}
-          {registerData.error && <p>{registerData.error}</p>}
 
           {/* Submit button with disabled attribute */}
           <button
