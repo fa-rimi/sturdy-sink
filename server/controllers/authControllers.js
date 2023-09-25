@@ -1,65 +1,70 @@
 const User = require("../models/users");
+const Dictionary = require("../models/dictionary");
 const { hashPassword, comparePassword } = require("../helpers/hash");
 const { createToken, verifyToken } = require("../helpers/jwt");
 
-// Function to create a new user
-const createUser = async (name, email, password) => {
-  // Check for name
-  if (!name) {
-    throw new Error("Name is required");
-  }
-
-  // Check for password
-  if (!password || password.length < 6) {
-    throw new Error("Password must contain 6 characters");
-  }
-
-  // Check for email
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    throw new Error("Email is already in use");
-  }
-
-  // Hash the provided password
-  const hashedPassword = await hashPassword(password);
-
-  // Create a new user in the database
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-  });
-
-  console.log(user);
-  return user;
-};
-
-// Function to generate a JWT token and set it as a cookie
-const generateTokenAndSetCookie = (res, user) => {
-  // Create a new token
-  const token = createToken(user);
-
-  // Set a cookie with the token
-  res.cookie("authToken", token, {
-    httpOnly: true, // Make the cookie accessible only via HTTP(S)
-    maxAge: 24 * 60 * 60 * 1000, // Cookie expires in 24 hours
-  });
-
-  return token;
-};
-
-// Handler for registering a new user
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Create a new user and perform input validation
-    const user = await createUser(name, email, password);
+    // Check for name
+    if (!name) {
+      return res.status(400).json({
+        error: "Name is required",
+      });
+    }
+
+    // Check for password
+    if (!password || password.length < 6) {
+      return res.status(400).json({
+        error: "Password must contain 6 characters",
+      });
+    }
+
+    // Check for email
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({
+        error: "Email is already in use",
+      });
+    }
+
+    // Hash the provided password
+    const hashedPassword = await hashPassword(password);
+
+    // Create a new user in the database
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // Create a dictionary entry with the user's _id
+    const newDictionary = new Dictionary({
+      user: user._id, // Set the user field to the _id of the user
+      entries: [
+        {
+          name: "hello",
+          definition: "greetings",
+          word: "Hello",
+          example: "Hello World",
+          tags: ["Front-End"],
+        },
+      ],
+    });
+
+    // Save the new dictionary to the database
+    await newDictionary.save();
 
     // Generate a new token and set it as a cookie
-    const token = generateTokenAndSetCookie(res, user);
+    const token = createToken(user);
 
     // Respond with the newly created user and token
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
     res.json({
       user,
       token,
@@ -87,12 +92,18 @@ const loginUser = async (req, res) => {
     // Check if the provided password matches the stored hashed password
     const checkMatch = await comparePassword(password, user.password);
     if (checkMatch) {
-      // Password is correct, generate a new token and set it as a cookie
-      const token = generateTokenAndSetCookie(res, user);
+      // Password is correct, generate a new token
+      const token = createToken(user);
 
       // Verify the token to ensure the user is authenticated
       const decodedToken = verifyToken(token);
       if (decodedToken) {
+        // Set the token as a cookie
+        res.cookie("authToken", token, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+
         // Respond with a success message, user details, and token
         res.json({
           message: "Correct password",
