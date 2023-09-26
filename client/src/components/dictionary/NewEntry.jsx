@@ -10,78 +10,124 @@ const NewEntry = () => {
     word: "",
     definition: "",
     example: "",
+    tags: "", // Initialize tags as an empty string
   });
 
   const handleChange = (e) => {
-    setEntryData({
-      ...entryData,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "tags") {
+      setEntryData({
+        ...entryData,
+        [e.target.name]: e.target.value,
+      });
+    } else {
+      setEntryData({
+        ...entryData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { word, definition, example } = entryData;
+    const { word, definition, example, tags } = entryData;
 
     try {
+
       const response = await axios.post("/NewEntry", {
         word,
         definition,
         example,
+        tags, // Include tags as a string in the request
       });
 
       if (response.data.error) {
-        toast.error(response.data.error); // Display the error message as a toast
+        toast.error(response.data.error);
       } else {
         setEntryData({
           word: "",
           definition: "",
           example: "",
+          tags: "", // Clear the tags string
         });
 
         navigate("/Dictionary");
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred. Please try again later."); // Display a generic error message as a toast
+      toast.error("Error: Please try again later.");
     }
   };
 
   return (
-    <div className="w-[900px] h-[400px] flex bg-slate-400">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center justify-center">
-        <input
-          type="text"
-          name="word"
-          id="word"
-          placeholder="Enter Word"
-          onChange={handleChange}
-          value={entryData.word}
-        />
-        <input
-          type="text"
-          name="definition"
-          id="definition"
-          placeholder="Enter Definition"
-          onChange={handleChange}
-          value={entryData.definition}
-        />
-        <input
-          type="text"
-          name="example"
-          id="example"
-          placeholder="Enter Example"
-          onChange={handleChange}
-          value={entryData.example}
-        />
-
-        {/* Select tag options */}
-
-        <button type="submit">Create New Entry</button>
-      </form>
+    <div className="flex items-center justify-center">
+      <div className="bg-white p-5 rounded-lg shadow-lg w-[800px]">
+        <h2 className="text-2xl font-semibold mb-4">Create a New Entry</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col">
+            <label htmlFor="word" className="text-lg font-medium">
+              Word
+            </label>
+            <input
+              type="text"
+              name="word"
+              id="word"
+              placeholder="Enter Word"
+              onChange={handleChange}
+              value={entryData.word}
+              className="border rounded-md py-2 px-3 mt-1"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="definition" className="text-lg font-medium">
+              Definition
+            </label>
+            <textarea
+              name="definition"
+              id="definition"
+              placeholder="Enter Definition"
+              onChange={handleChange}
+              value={entryData.definition}
+              className="border rounded-md py-2 px-3 mt-1 max-h-[200px]"
+              rows="2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="example" className="text-lg font-medium">
+              Example
+            </label>
+            <textarea
+              type="text"
+              name="example"
+              id="example"
+              placeholder="Enter Example"
+              onChange={handleChange}
+              value={entryData.example}
+              className="border rounded-md py-2 px-3 mt-1 max-h-[250px]"
+              rows="2"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="tags" className="text-lg font-medium">
+              Tags
+            </label>
+            <input
+              type="text"
+              name="tags"
+              id="tags"
+              placeholder="Enter Tags (comma-separated)"
+              onChange={handleChange}
+              value={entryData.tags}
+              className="border rounded-md py-2 px-3 mt-1"
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+            Create New Entry
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

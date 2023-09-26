@@ -7,7 +7,6 @@ import { toast } from "react-hot-toast";
 const SignUp = () => {
   const navigate = useNavigate();
 
-  // Initialize the registration form fields as an object with empty strings
   const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
@@ -19,25 +18,18 @@ const SignUp = () => {
     registerData.confirm === registerData.password &&
     registerData.confirm.length >= 6;
 
-  // Handle input changes for all form fields
   const handleChange = (e) => {
     setRegisterData({
-      // Spread the data that's already there
       ...registerData,
-      // Replace data with what the user inputs
       [e.target.name]: e.target.value,
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Deconstruct the data
     const { name, email, password } = registerData;
 
     try {
-      // Send a POST request to the "/SignUp" endpoint
       const response = await axios.post("/SignUp", {
         name,
         email,
@@ -45,10 +37,8 @@ const SignUp = () => {
       });
 
       if (response.data.error) {
-        // Display an error toast message if there's an error from the server
         toast.error(response.data.error);
       } else {
-        // Reset the registration form fields
         setRegisterData({
           name: "",
           email: "",
@@ -60,8 +50,6 @@ const SignUp = () => {
         toast.success(`${name}'s dictionary created.`);
 
         navigate("/Home");
-
-        // Display a success toast message
         toast.success("Register Success");
       }
     } catch (error) {
@@ -70,10 +58,10 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name:</label>
+    <div className="flex items-center justify-center h-screen">
+      <div className="bg-blue-400 p-6 rounded-md shadow-md w-80">
+        <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             name="name"
@@ -81,9 +69,8 @@ const SignUp = () => {
             value={registerData.name}
             onChange={handleChange}
             required
+            className="border rounded-md py-2 px-3 w-full"
           />
-
-          <label htmlFor="email">Email:</label>
           <input
             type="email"
             name="email"
@@ -91,9 +78,8 @@ const SignUp = () => {
             value={registerData.email}
             onChange={handleChange}
             required
+            className="border rounded-md py-2 px-3 w-full"
           />
-
-          <label htmlFor="password">Password:</label>
           <input
             type="password"
             name="password"
@@ -101,10 +87,9 @@ const SignUp = () => {
             value={registerData.password}
             onChange={handleChange}
             required
+            className="border rounded-md py-2 px-3 w-full"
           />
-
-          <label htmlFor="confirm">Confirm Password:</label>
-          <div className="password-confirm">
+          <div className="password-confirm flex items-center border rounded-md py-2 px-3 w-full">
             <input
               type="password"
               name="confirm"
@@ -112,20 +97,24 @@ const SignUp = () => {
               value={registerData.confirm}
               onChange={handleChange}
               required
+              className="w-full"
             />
             {isPasswordValid && (
               <FaCheckCircle className="checkmark-icon" color="green" />
             )}
           </div>
-
-          <button type="submit" disabled={!isPasswordValid}>
+          <button
+            type="submit"
+            disabled={!isPasswordValid}
+            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 w-full">
             Create Account
           </button>
         </form>
-
-        {/* Add a link to the sign-in page */}
-        <p>
-          Already have an account? <Link to="/SignIn">Sign In Here</Link>
+        <p className="text-sm mt-4">
+          Already have an account?{" "}
+          <Link to="/SignIn" className="text-blue-600">
+            Sign In Here
+          </Link>
         </p>
       </div>
     </div>

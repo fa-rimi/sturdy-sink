@@ -15,7 +15,7 @@ const LogoutBtn = () => {
   return (
     <div className="">
       <button type="button" onClick={handleLogout}>
-        Logout <BsBoxArrowRight />{" "}
+        <BsBoxArrowRight size={40} color="white"/>{" "}
       </button>
     </div>
   );
